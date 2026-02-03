@@ -16,17 +16,23 @@
 
 
 <body>
-<!-- HEADER ======================================================================================== -->
+
+  <!-- HEADER -->
 <header class="header">
-  <div class="container d-flex justify-content-between align-items-center">
-    
+  <div class="container">
+
     <!-- LOGO -->
     <div class="logo">
-      <img src="Recursos/sunshi.svg" alt="Logo Sunshi" class="logo-img" href="#">
+      <img src="Recursos/sunshi.svg" alt="Logo Sunshi" class="logo-img">
       <span>SUNSHI</span>
     </div>
 
-    <!-- NAVEGACIÓN ================================================================================ -->
+    <!-- BOTÓN MENÚ (mobile) -->
+    <button class="menu-toggle" aria-label="Abrir menú">
+      ☰
+    </button>
+
+    <!-- NAVEGACIÓN -->
     <nav>
       <a href="#valor">Valor</a>
       <a href="#nosotros">Historia</a>
@@ -36,6 +42,17 @@
 
   </div>
 </header>
+
+<!-- SCRIPT -->
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('nav');
+
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('active');
+  });
+</script>
+
 
 
 <!-- HERO ==========================================================================================  -->
@@ -207,44 +224,109 @@
 
 
 
+
+
 <!-- CONTACTO -->
 <form class="contacto">
 
+  <h2 id="pedido">Haz tu pedido</h2>
+
   <div class="form-grid">
 
-    <!-- IZQUIERDA: DATOS -->
+    <!-- DATOS -->
     <div class="form-datos">
       <input type="text" placeholder="Nombre" required>
       <input type="email" placeholder="Email" required>
       <input type="tel" placeholder="Teléfono" required>
-      <textarea placeholder="Mensaje adicional"></textarea>
+      <textarea placeholder="Dirección"></textarea>
     </div>
 
-    <!-- DERECHA: OPCIONES -->
+    <!-- OPCIONES -->
     <div class="form-opciones">
-      <div>
+
+      <div class="bloque">
         <h3>Elige tu Rollito de Sol</h3>
         <div class="opciones">
-          <label><input type="checkbox" name="sushi"> Rollo Solcecito</label>
-          <label><input type="checkbox" name="sushi"> Rollo Sonrisa</label>
-          <label><input type="checkbox" name="sushi"> Rollo Soñador</label>
-          <label><input type="checkbox" name="sushi"> Rollo Sorpresa</label>
+          <label class="check">
+            <input type="checkbox" class="rollo">
+            <span></span>
+            Rollo Solcecito
+          </label>
+
+          <label class="check">
+            <input type="checkbox" class="rollo">
+            <span></span>
+            Rollo Sonrisa
+          </label>
+
+          <label class="check">
+            <input type="checkbox" class="rollo">
+            <span></span>
+            Rollo Soñador
+          </label>
+
+          <label class="check">
+            <input type="checkbox" class="rollo">
+            <span></span>
+            Rollo Sorpresa
+          </label>
         </div>
       </div>
 
-      <div>
+      <div class="bloque">
         <h3>¿Cómo lo prefieres?</h3>
         <div class="opciones">
-          <label><input type="checkbox" name="utensilio"> Palillos</label>
-          <label><input type="checkbox" name="utensilio"> Tenedor</label>
+          <label class="check">
+            <input type="checkbox" class="utensilio">
+            <span></span>
+            Palillos
+          </label>
+
+          <label class="check">
+            <input type="checkbox" class="utensilio">
+            <span></span>
+            Tenedor
+          </label>
         </div>
       </div>
+
     </div>
 
   </div>
 
   <button id="botonContacto" type="submit">Enviar pedido</button>
+
 </form>
+
+
+<script>
+  function soloUno(grupo) {
+    grupo.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+
+        if (checkbox.checked) {
+          grupo.forEach(item => {
+            if (item !== checkbox) {
+              item.disabled = true;
+            }
+          });
+        } else {
+          grupo.forEach(item => {
+            item.disabled = false;
+          });
+        }
+
+      });
+    });
+  }
+
+  const rollos = document.querySelectorAll('.rollo');
+  const utensilios = document.querySelectorAll('.utensilio');
+
+  soloUno(rollos);
+  soloUno(utensilios);
+</script>
+
 
 
 
