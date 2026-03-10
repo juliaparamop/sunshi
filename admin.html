@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SUNSHI | Admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+  <main>
+    <section class="pedidos-section">
+      <div class="panel-header">
+        <h4>Panel de Administración | SUNSHI</h1>
+        <button id="logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+      <h2>Pedidos recibidos</h2>
+
+      <div class="dashboard-top">
+          <div class="contador">
+          Total de pedidos: <span id="totalPedidos">0</span>
+          </div>
+
+          <div class="filtros">
+          <button class="filtro-btn" data-estado="todos">Todos</button>
+          <button class="filtro-btn" data-estado="pendiente">Pendiente</button>
+          <button class="filtro-btn" data-estado="entregado">Entregado</button>
+          </div>
+      </div>
+
+      <table id="tablaPedidos">
+          <thead>
+              <tr>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Dirección</th>
+              <th>Rollo</th>
+              <th>Utensilio</th>
+              <th>Fecha <button id="ordenFecha" class="btn-fecha">⇅</button></th>
+              <th>Acciones</th>
+              <th>Estatus</th>
+              </tr>
+          </thead>
+
+        <tbody id="listaPedidos">
+        </tbody>
+      </table>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="cerrar">&times;</span>
+          <div id="modal-body"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+getFirestore, collection, doc, deleteDoc, updateDoc, getDoc, onSnapshot, enableIndexedDbPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey:"AIzaSyBMvZu9E8cp_b6pFKkwqjWl0ldFmuSWuAg",
+authDomain:"sunshi-app.firebaseapp.com",
+projectId:"sunshi-app",
+storageBucket:"sunshi-app.firebasestorage.app",
+messagingSenderId:"519588346387",
+appId:"1:519588346387:web:9e1dfd8499ded8fad41de6"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+enableIndexedDbPersistence(db).catch(()=>{});
+
+let pedidosGlobal=[];
+let filtroEstado="todos";
+let ordenFecha="desc";
+
+/* LOGOUT */
+document.getElementById("logout").onclick = async () => {
+  await signOut(auth);
+  window.location.href="index.html";
+};
+
+/* AUTH */
+onAuthStateChanged(auth, async(user) => {
+  if(!user){
+    window.location.href="index.html";
+    return;
+  }
+
+  const ref=doc(db,"usuarios",user.uid);
+  const snap=await getDoc(ref);
+
+  if(!snap.exists() || snap.data().rol!=="admin"){
+    window.location.href="index.html";
+    return;
+  }
+
+  cargarPedidos();
+});
+
+/* CARGAR PEDIDOS */
+function cargarPedidos(){
+  onSnapshot(collection(db,"pedidos"),(snapshot)=>{
+    pedidosGlobal=[];
+    snapshot.forEach((pedido)=>{
+      pedidosGlobal.push({ id:pedido.id, ...pedido.data() });
+    });
+    renderPedidos();
+  });
+}
+
+/* FILTRAR + ORDENAR */
+function renderPedidos(){
+  let pedidos=[...pedidosGlobal];
+
+  if(filtroEstado!=="todos"){
+    pedidos = pedidos.filter(p=>p.estado===filtroEstado);
+  }
+
+  pedidos.sort((a,b)=>{
+    let fa=a.fecha?.seconds||0;
+    let fb=b.fecha?.seconds||0;
+    return ordenFecha==="desc" ? fb-fa : fa-fb;
+  });
+
+  dibujarTabla(pedidos);
+}
+
+/* DIBUJAR TABLA */
+function dibujarTabla(pedidos){
+  const tabla=document.getElementById("listaPedidos");
+  const contador=document.getElementById("totalPedidos");
+  tabla.innerHTML="";
+  contador.innerText=pedidos.length;
+
+  pedidos.forEach((data)=>{
+    const fecha=data.fecha ? new Date(data.fecha.seconds*1000).toLocaleString() : "Sin fecha";
+    const estadoHTML = data.estado==="entregado"
+      ? `<span class="estado-entregado">Entregado</span>`
+      : `<span class="estado-pendiente">Pendiente</span> <button class="btn-entregar">Marcar</button>`;
+
+    tabla.innerHTML += `
+      <tr data-id="${data.id}">
+        <td>${data.nombre}</td>
+        <td>${data.telefono}</td>
+        <td>${data.direccion}</td>
+        <td>${data.rollo}</td>
+        <td>${data.utensilio}</td>
+        <td>${fecha}</td>
+        <td class="acciones">
+          <button class="btn-ver">Ver</button>
+          <button class="btn-editar">Editar</button>
+          <button class="btn-eliminar">Eliminar</button>
+        </td>
+        <td class="estatus">${estadoHTML}</td>
+      </tr>
+    `;
+  });
+}
+
+/* FILTROS */
+document.querySelectorAll(".filtro-btn").forEach(btn=>{
+  btn.onclick=()=>{
+    filtroEstado=btn.dataset.estado;
+    renderPedidos();
+  };
+});
+
+/* ORDEN FECHA */
+document.getElementById("ordenFecha").onclick=()=>{
+  ordenFecha=ordenFecha==="desc"?"asc":"desc";
+  renderPedidos();
+};
+
+/* MODAL Y EVENTOS DE TABLA */
+document.addEventListener("click", async(e)=>{
+  const fila = e.target.closest("tr");
+  if(!fila) return;
+  const id = fila.dataset.id;
+
+  /* VER */
+  if(e.target.classList.contains("btn-ver")){
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modal-body");
+    const estado = fila.children[7].innerText.includes("Entregado")
+      ? `<span class="estado-badge entregado">Entregado</span>`
+      : `<span class="estado-badge pendiente">Pendiente</span>`;
+    modalBody.innerHTML = `
+      <h3>Detalles del Pedido</h3>
+      <div class="detalle-grid">
+        <div class="detalle-label">Nombre</div><div class="detalle-value">${fila.children[0].innerText}</div>
+        <div class="detalle-label">Teléfono</div><div class="detalle-value">${fila.children[1].innerText}</div>
+        <div class="detalle-label">Dirección</div><div class="detalle-value">${fila.children[2].innerText}</div>
+        <div class="detalle-label">Rollo</div><div class="detalle-value">${fila.children[3].innerText}</div>
+        <div class="detalle-label">Utensilio</div><div class="detalle-value">${fila.children[4].innerText}</div>
+        <div class="detalle-label">Fecha</div><div class="detalle-value">${fila.children[5].innerText}</div>
+        <div class="detalle-label">Estado</div><div class="detalle-value">${estado}</div>
+      </div>
+    `;
+    modal.style.display="flex";
+  }
+
+  /* EDITAR */
+  if(e.target.classList.contains("btn-editar")){
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modal-body");
+modalBody.innerHTML = `
+  <h3>Editar Pedido</h3>
+  <input id="editNombre" value="${fila.children[0].innerText}">
+  <input id="editTelefono" value="${fila.children[1].innerText}">
+  <input id="editDireccion" value="${fila.children[2].innerText}">
+
+  <label>Rollo</label>
+  <select id="editRollo">
+    <option value="Rollo Solcecito" ${fila.children[3].innerText==="Rollo Solcecito" ? "selected":""}>Rollo Solcecito</option>
+    <option value="Rollo Sonrisa" ${fila.children[3].innerText==="Rollo Sonrisa" ? "selected":""}>Rollo Sonrisa</option>
+    <option value="Rollo Soñador" ${fila.children[3].innerText==="Rollo Soñador" ? "selected":""}>Rollo Soñador</option>
+    <option value="Rollo Sorpresa" ${fila.children[3].innerText==="Rollo Sorpresa" ? "selected":""}>Rollo Sorpresa</option>
+  </select>
+
+  <label>Utensilio</label>
+  <select id="editUtensilio">
+    <option value="Palillos" ${fila.children[4].innerText==="Palillos" ? "selected":""}>Palillos</option>
+    <option value="Cuchara" ${fila.children[4].innerText==="Cuchara" ? "selected":""}>Cuchara</option>
+    <option value="Manos" ${fila.children[4].innerText==="Manos" ? "selected":""}>Manos</option>
+  </select>
+
+  <label>Estado</label>
+  <select id="editEstado">
+    <option value="pendiente" ${fila.children[7].innerText.includes("Pendiente")?"selected":""}>Pendiente</option>
+    <option value="entregado" ${fila.children[7].innerText.includes("Entregado")?"selected":""}>Entregado</option>
+  </select>
+
+  <button id="guardarCambios">Guardar</button>
+`;
+    modal.style.display="flex";
+
+    setTimeout(()=>{
+      document.getElementById("guardarCambios").onclick=async()=>{
+        await updateDoc(doc(db,"pedidos",id),{
+          nombre:document.getElementById("editNombre").value,
+          telefono:document.getElementById("editTelefono").value,
+          direccion:document.getElementById("editDireccion").value,
+          rollo:document.getElementById("editRollo").value,
+          utensilio:document.getElementById("editUtensilio").value,
+          estado:document.getElementById("editEstado").value
+        });
+        modal.style.display="none";
+      };
+    },50);
+  }
+
+  /* ELIMINAR */
+  if(e.target.classList.contains("btn-eliminar")){
+    if(confirm("¿Eliminar pedido?")){
+      await deleteDoc(doc(db,"pedidos",id));
+    }
+  }
+
+  /* MARCAR ENTREGADO */
+  if(e.target.classList.contains("btn-entregar")){
+    await updateDoc(doc(db,"pedidos",id),{ estado:"entregado" });
+  }
+
+  /* CERRAR MODAL */
+  const modal = document.getElementById("modal");
+  const cerrarModal = modal.querySelector(".cerrar");
+
+  cerrarModal.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  window.onclick = (e) => {
+    if(e.target === modal){
+      modal.style.display = "none";
+    }
+  };
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUNSHI | Pedido</title>
+<link rel="stylesheet" href="formulario.css">
+</head>
+
+<body>
+
+<main class="contenedor-principal">
+
+<form id="pedidoForm">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <a href="index.html" class="logo">
+      <img src="Recursos/sunshi_morado.svg" alt="Logo Sunshi" class="logo-img">
+      <span>SUNSHI</span>
+    </a>
+  </div>
+
+  <h1>Haz tu pedido</h1>
+
+  <input type="text" id="nombre" placeholder="Nombre" required>
+  <input type="email" id="email" placeholder="Email" required>
+  <input type="tel" id="telefono" placeholder="Teléfono" required>
+  <textarea id="direccion" placeholder="Dirección"></textarea>
+
+  <div class="custom-select" id="rolloSelect">
+    <div class="selected">Elige el rollo de tu preferencia</div>
+    <div class="options">
+      <div data-value="Rollo Solcecito">Rollo Solcecito</div>
+      <div data-value="Rollo Sonrisa">Rollo Sonrisa</div>
+      <div data-value="Rollo Soñador">Rollo Soñador</div>
+      <div data-value="Rollo Sorpresa">Rollo Sorpresa</div>
+    </div>
+  </div>
+
+<input type="hidden" id="rollo" value="Rollo Solcecito">
+
+  <div class="opciones">
+    <label class="check">
+      <input type="radio" name="utensilio" value="Palillos" required>
+      <span>Palillos</span>
+    </label>
+
+    <label class="check">
+      <input type="radio" name="utensilio" value="Tenedor">
+      <span>Tenedor</span>
+    </label>
+  </div>
+
+  <button type="submit">Enviar Pedido</button>
+  <a href="usuarios.html" class="logout-btn">Salir del formulario</a>
+
+</form>
+
+</main>
+
+<footer>
+  <h4>SUNSHI | Un rollito de sol cada día</h4>
+  <p>Julia Páramo</p>
+
+  <div class="redes">
+    <a href="https://www.instagram.com/julia_paramo_p?igsh=MTU4NGx1bzRueGZqZA==" target="_blank">
+      <img src="Recursos/imagenes/ig.svg" alt="Instagram">
+    </a>
+
+    <a href="https://www.linkedin.com/in/julia-páramo-727491312" target="_blank">
+      <img src="Recursos/imagenes/in.svg" alt="LinkedIn">
+    </a>
+  </div>
+</footer>
+
+</script>
+
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+addDoc,
+collection,
+enableIndexedDbPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* CONFIG FIREBASE */
+const firebaseConfig = {
+  apiKey: "AIzaSyBMvZu9E8cp_b6pFKkwqjWl0ldFmuSWuAg",
+  authDomain: "sunshi-app.firebaseapp.com",
+  projectId: "sunshi-app",
+  storageBucket: "sunshi-app.firebasestorage.app",
+  messagingSenderId: "519588346387",
+  appId: "1:519588346387:web:9e1dfd8499ded8fad41de6"
+};
+
+/* INICIALIZAR FIREBASE */
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/* ACTIVAR MODO OFFLINE */
+
+enableIndexedDbPersistence(db)
+.then(()=>{
+console.log("Firestore offline activado");
+})
+.catch((err)=>{
+console.log("Error activando modo offline:", err);
+});
+
+/* ENVIAR PEDIDO */
+
+const form = document.getElementById("pedidoForm");
+
+if(form){
+
+form.addEventListener("submit", async (e)=>{
+
+e.preventDefault();
+
+try{
+
+/* OBTENER DATOS */
+
+const nombre = document.getElementById("nombre").value;
+const email = document.getElementById("email").value;
+const telefono = document.getElementById("telefono").value;
+const direccion = document.getElementById("direccion").value;
+const rollo = document.getElementById("rollo").value;
+
+const utensilio =
+document.querySelector('input[name="utensilio"]:checked')?.value
+|| "Sin utensilio";
+
+/* GUARDAR PEDIDO */
+const user = auth.currentUser;
+
+await addDoc(collection(db,"pedidos"),{
+uid: user.uid,
+nombre: nombre,
+email: email,
+telefono: telefono,
+direccion: direccion,
+rollo: rollo,
+utensilio: utensilio,
+estado: "pendiente",
+fecha: new Date()
+});
+
+/* MENSAJE */
+
+alert("Pedido enviado correctamente");
+
+/* LIMPIAR FORM */
+
+form.reset();
+
+}catch(error){
+
+alert("Error al enviar el pedido: " + error.message);
+
+}
+
+});
+
+}
+
+/* SELECT PERSONALIZADO ROLLOS */
+
+const custom = document.getElementById("rolloSelect");
+
+if(custom){
+
+const selected = custom.querySelector(".selected");
+const options = custom.querySelectorAll(".options div");
+const hiddenInput = document.getElementById("rollo");
+
+selected.addEventListener("click",()=>{
+custom.classList.toggle("active");
+});
+
+options.forEach(option=>{
+
+option.addEventListener("click",()=>{
+
+selected.textContent = option.textContent;
+hiddenInput.value = option.dataset.value;
+
+custom.classList.remove("active");
+
+});
+
+});
+
+document.addEventListener("click",(e)=>{
+if(!custom.contains(e.target)){
+custom.classList.remove("active");
+}
+});
+
+}
+
+</script>
+</body>
+</html>

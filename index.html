@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SUNSHI | Index</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Sunshi es sushi saludable, accesible y emocional. Un rollito de sol cada día.">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="index.css">
+
+</head>
+
+
+
+
+<body>
+
+  <!-- HEADER -->
+<header class="header">
+  <div class="container">
+
+    <!-- LOGO -->
+    <div class="logo">
+      <a href="#" class="logo">
+        <img src="Recursos/sunshi.svg" alt="Logo Sunshi" class="logo-img">
+        <span>SUNSHI</span>
+      </a>
+    </div>
+
+    <!-- BOTÓN MENÚ (mobile) -->
+    <button class="menu-toggle" aria-label="Abrir menú">
+      ☰
+    </button>
+
+    <!-- NAVEGACIÓN -->
+    <nav>
+      <a href="#valor">Valor</a>
+      <a href="#nosotros">Historia</a>
+      <a href="#productos">Menú</a>
+      <!-- <a href="#contacto_acceso" class="btn-nav">Ordenar</a> -->
+
+      <div class="auth-buttons">
+        <a id="btnLogin" href="login.html" class="btn-login">Iniciar sesión</a> 
+        <a id="btnRegistro" href="register.html" class="btn-register">Registrarse</a> 
+      </div>
+    </nav>
+
+  </div>
+</header>
+
+<!-- SCRIPT -->
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('nav');
+
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('active');
+  });
+</script>
+
+
+
+<!-- HERO ==========================================================================================  -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="Recursos/imagenes/fondoPrincipal.JPG" alt="Sunshi sushi">
+  </div>
+
+  <div class="hero-content">
+    <h1>SUNSHI</h1>
+    <h2 class="slogan">Un rollito de sol cada día</h2>
+    <a href="#contacto_acceso" class="btn-hero">Ordenar ahora</a>
+  </div>
+</section>
+
+
+<!-- DESCRIPCION ==================================================================================  -->
+<section class="descripcion">
+  <div class="container grid-desc">
+    <div>
+      <p class="desc-p">
+        Sunshi es un emprendimiento de venta de sushi casero que nace de la fusión de dos palabras: Sushi + Sunshine. 
+        Representando no solo un alimento, sino una experiencia que transmite calidez, bienestar y alegría en cada bocado.
+        Más que vender rollos de sushi, en Sunshi creamos momentos de luz en medio de la rutina.
+      </p>
+    </div>
+
+    <div class="desc-img">
+      <img src="Recursos/imagenes/02.png" alt="Sunshi sushi">
+    </div>
+  </div>
+</section>
+
+
+
+<!-- PROPUESTA DE VALOR ============================================================================== -->
+<section class="valor" id="valor">
+  <h4 >RAZONES PARA ELEGIR</h4>
+  <h2 id="subtitulo">SUNSHI</h2>
+
+  <div class="valor-grid">
+
+
+      <div class="valor-card">
+          <div class="icon">
+            <img src="Recursos/imagenes/03.png" alt="">
+          </div>
+          <h3>SALUD</h3>
+          <p>Ingredientes balanceados, frescos y naturales.</p>
+      </div>
+
+
+      <div class="valor-card">
+          <div class="icon">
+            <img src="Recursos/imagenes/04.png" alt="">
+          </div>
+          <h3>ACCESIBLE</h3>
+          <p>Menos de $100 MX sin sacrificar calidad.</p>
+      </div>
+      <div class="valor-card">
+          <div class="icon">
+            <img src="Recursos/imagenes/05.png" alt="">
+          </div>
+          <h3>EXCLUSIVIDAD</h3>
+          <p>Un mensaje personalizado solo para ti en cada rollo.</p>
+      </div>
+      <div class="valor-card">
+          <div class="icon">
+            <img src="Recursos/imagenes/06.png" alt="">
+          </div>
+          <h3>CALIDAD</h3>
+          <p>Alimentos preparados al día con cuidado y dedicación.</p>
+      </div>
+
+  </div>
+</section>
+
+
+
+<!-- SOBRE NOSOTROS ================================================================================== -->
+<section class="nosotros" >
+  <h2 id="nosotros">Nuestra historia</h2>
+  <div class="container grid-nosotros">
+    <div>
+      <p>
+        Hoy en día, la mayoría de las personas viven atrapadas en un ciclo que parece no tener pausa.
+        Despertar con el sonido de la alarma, correr para llegar a tiempo al trabajo o a clases, pasar horas frente a una pantalla, lidiar con pendientes, presiones, tráfico, cansancio… 
+        y al final del día, regresar a casa sin energía, sin ganas de cocinar y sin tiempo para pensar en uno mismo.
+
+        En medio de esa rutina automática, algo tan básico como comer bien deja de ser una prioridad.
+        No porque no importe, sino porque parece un lujo:
+        falta de tiempo, falta de dinero, estrés, cansancio, y pocas opciones que realmente sean saludables, accesibles y agradables al mismo tiempo.
+
+        Así, sin darnos cuenta, empezamos a elegir lo más rápido: comida ultra procesada, sin equilibrio, sin intención, sin emoción.
+        Comemos por inercia, no por disfrute.
+        Nos alimentamos, pero no nos nutrimos.
+      </p>
+    </div>
+    <div class="nosotros-img">
+      <img src="Recursos/imagenes/07.png" alt="">
+    </div>
+        <div class="nosotros-img">
+      <img src="Recursos/imagenes/08.png" alt="">
+    </div>
+    <div>
+      <p>
+        Y es justo ahí donde nace Sunshi.
+
+        Surge como una respuesta a esa rutina que apaga, a esos días grises que se sienten todos iguales.
+        Nace con una idea simple pero poderosa:
+        si no podemos detener el mundo, al menos podemos regalar un momento de luz dentro de él.
+
+        Queremos que cada rollo sea una pausa.
+        Un respiro.
+        Un pequeño recordatorio de que mereces algo bonito, algo rico, algo hecho especialmente para ti.
+
+        Por eso, Sunshi no solo ofrece sushi.
+        Ofrece una experiencia que combina sabor, nutrición y emoción.
+        Una alternativa real, saludable y accesible que no solo alimenta el cuerpo, sino que también reconecta con lo que sentimos.
+
+        Porque creemos que incluso en los días más pesados,
+        un rollito de sol puede cambiarlo todo. 
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- PRODUCTOS ======================================================================================= -->
+<section class="productos">
+  <h2 id="productos">ROLLITOS DE SOL</h2>
+  <div class="productos-grid">
+    <div class="card-sushi">
+      <div class="img">
+        <img src="Recursos/imagenes/09.png" alt="">
+      </div>
+      <h3>Rollo Solcecito</h3>
+      <p>Proteína: Atún</p>
+      <button onclick="alert('Necesitas estar registrado o iniciar sesión para ver más información.')">Ver más</button>
+    </div>
+    <div class="card-sushi">
+      <div class="img">
+        <img src="Recursos/imagenes/10.png" alt="">
+      </div>
+      <h3>Rollo Sonrisa</h3>
+      <p>Proteína: Salmón</p>
+      <button onclick="alert('Necesitas estar registrado o iniciar sesión para ver más información.')">Ver más</button>
+    </div>
+    <div class="card-sushi">
+      <div class="img">
+        <img src="Recursos/imagenes/11.png" alt="">
+      </div>
+      <h3>Rollo Soñador</h3>
+      <p>Proteína: Pollo teriyaki</p>
+      <button onclick="alert('Necesitas estar registrado o iniciar sesión para ver más información.')">Ver más</button>
+    </div>
+    <div class="card-sushi">
+      <div class="img">
+        <img src="Recursos/imagenes/12.png" alt="">
+      </div>
+      <h3>Rollo Sorpresa</h3>
+      <p>Proteína: Camarón</p>
+      <button onclick="alert('Necesitas estar registrado o iniciar sesión para ver más información.')">Ver más</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto_acceso">
+
+  <h2>Tu rollito te espera</h2>
+
+
+  <div class="acceso-box">
+
+    <!-- <input type="email" id="emailAuth" placeholder="Correo"> -->
+    <!-- <input type="password" id="passwordAuth" placeholder="Contraseña"> -->
+
+    <a href="register.html" id="btnRegistro" class="btn-acceso">
+      Registrarse
+    </a>
+
+    <a href="login.html" id="btnLogin" class="btn-acceso">
+      Iniciar sesión
+    </a>
+
+  </div>
+
+</section>
+
+
+<script>
+  function soloUno(grupo) {
+    grupo.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+
+        if (checkbox.checked) {
+          grupo.forEach(item => {
+            if (item !== checkbox) {
+              item.disabled = true;
+            }
+          });
+        } else {
+          grupo.forEach(item => {
+            item.disabled = false;
+          });
+        }
+
+      });
+    });
+  }
+
+  const rollos = document.querySelectorAll('.rollo');
+  const utensilios = document.querySelectorAll('.utensilio');
+
+  soloUno(rollos);
+  soloUno(utensilios);
+</script>
+
+<footer>
+  <h4>SUNSHI | Un rollito de sol cada día</h4>
+  <p>Julia Páramo</p>
+
+  <div class="redes">
+    <a href="https://www.instagram.com/julia_paramo_p?igsh=MTU4NGx1bzRueGZqZA==" target="_blank">
+      <img src="Recursos/imagenes/ig.svg" alt="Instagram">
+    </a>
+
+    <a href="https://www.linkedin.com/in/julia-páramo-727491312" target="_blank">
+      <img src="Recursos/imagenes/in.svg" alt="LinkedIn">
+    </a>
+  </div>
+</footer>
+
+</script>
+
+
+</body>
+</html>

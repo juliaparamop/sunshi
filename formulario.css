@@ -1,0 +1,284 @@
+:root{
+  --blanco:#FFFFFF;
+  --naranja:#ED9274;
+  --amarillo:#F4E4A4;
+  --azul:#6ABFC0;
+  --verde:#C8DDA1;
+  --morado:#A668A8;
+  --rosa:#E0A5CA;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", sans-serif;
+}
+
+/* FUENTE LOCAL */
+@font-face
+{
+  font-family:"BlueWinter";
+  src: url("Recursos/fonts/blue_winter/Blue Winter.ttf") format("truetype"),
+       url("Recursos/fonts/blue_winter/Blue Winter.otf") format("opentype");
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction: column; /* columna para organizar main + footer */
+  justify-content: flex-start; /* inicia desde arriba */
+  align-items:center;
+  background:linear-gradient(135deg, var(--azul), var(--verde), var(--rosa));
+}
+
+.contenedor-principal{
+  width:100%;
+  max-width:900px;
+  padding:2rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex: 1; /* permite que ocupe espacio restante */
+}
+
+/* FORMULARIO MODERNO */
+form{
+  width:100%;
+  max-width:700px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-radius:25px;
+  padding:3rem 2.5rem;
+  display:flex;
+  flex-direction:column;
+  gap:1.6rem;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+h1{
+  font-family:"BlueWinter";
+  font-size: 4rem;
+  color: var(--morado);
+  text-align:center;
+}
+
+input, textarea{
+  width:100%;
+  padding:1rem 1.2rem;
+  border-radius:20px;
+  border:1px solid rgba(0,0,0,0.1);
+  font-size:1rem;
+  background: var(--blanco);
+  transition: 0.25s;
+}
+
+input:focus, textarea:focus{
+  border-color: var(--amarillo);
+  box-shadow:0 0 10px var(--amarillo, 0.3);
+  outline:none;
+}
+
+textarea{
+  resize:none;
+  min-height:100px;
+}
+
+/* BOTÓN ENVIAR PEDIDO */
+button{
+  width:100%;
+  padding:1.2rem;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg, var(--verde), var(--azul));
+  color: var(--blanco);
+  font-size:1.5rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+button:hover{
+  transform: translateY(-3px);
+  box-shadow:0 12px 25px rgba(0,0,0,0.25);
+}
+
+/* BOTÓN CERRAR SESIÓN */
+.logout-btn{
+  width:50%;
+  text-align:center;
+  margin:auto;
+  padding:0.7rem;
+  border-radius:25px;
+  background: var(--naranja);
+  color: var(--blanco);
+  text-decoration:none;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.logout-btn:hover{
+  background: var(--verde);
+}
+
+/* LOGO */
+.logo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:1rem;
+  text-decoration: none;
+}
+
+.logo span{
+  font-family:"BlueWinter";
+  font-size:2.2rem;
+  color: var(--morado);
+}
+
+.logo-img{
+  height:50px;
+  width:auto;
+}
+
+/* SELECT PERSONALIZADO */
+.custom-select{
+  position:relative;
+  width:100%;
+  border-radius:20px;
+  background: var(--blanco);
+  cursor:pointer;
+  border:1px solid rgba(0,0,0,0.1);
+}
+
+.selected{
+  padding:1rem 1.2rem;
+}
+
+.options{
+  position:absolute;
+  top:100%;
+  left:0;
+  width:100%;
+  background: var(--blanco);
+  border-radius:15px;
+  display:none;
+  flex-direction:column;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  z-index:10;
+}
+
+.options div{
+  padding:0.9rem 1.2rem;
+  transition:0.2s;
+}
+
+.options div:hover{
+  background: var(--amarillo);
+}
+
+.custom-select.active .options{
+  display:flex;
+}
+
+/* RADIO PERSONALIZADO */
+.opciones{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:1rem;
+}
+
+.check{
+  position:relative;
+  cursor:pointer;
+  flex:0 1 40%;
+  max-width:200px;
+}
+
+.check input{
+  position:absolute;
+  opacity:0;
+}
+
+.check span {
+  display:block;
+  width:100%;
+  padding:0.9rem;
+  border-radius:20px;
+  background: var(--rosa);
+  text-align:center;
+  font-weight:500;
+  transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+.check:hover span{
+    transform: scale(1.05);
+}
+
+.check input:checked + span {
+  background: var(--azul);
+  color: var(--blanco);
+  font-weight:600;
+  box-shadow:0 6px 15px rgba(0,0,0,0.2);
+  transform: scale(1.1) translateY(-5px);
+}
+
+.check input:not(:checked) + span {
+  transform: scale(0.8);
+  opacity: 0.7; 
+}
+
+
+/* FOOTER */
+footer{
+  background:var(--azul);
+  color:#fff;
+  text-align:center;
+  padding:2rem 1rem;
+  display:flex;
+  flex-direction:column;
+  width: 100%;
+}
+
+/* TEXTO */
+footer h4{
+  font-weight:600;
+}
+
+footer p{
+  font-size:1rem;
+}
+
+/* REDES */
+.redes{
+  display:flex;
+  justify-content:center;
+  gap:1.2rem;
+  margin-top:.5rem;
+}
+
+.redes img{
+  width: 3rem;;
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+.redes img:hover
+{
+  transform: scale(1.15);
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  form{
+    padding:2rem 1.5rem;
+  }
+
+  h1{
+    font-size:2rem;
+  }
+}
